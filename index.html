@@ -1,0 +1,31 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voice Recognition Page</title>
+</head>
+<script>
+document.querySelector('form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    var form = event.target;
+    var formData = new FormData(form);
+
+    fetch('/recognize', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('results').innerText = data;
+    });
+});
+</script>
+<body>
+    <h1>Voice Recognition Page</h1>
+    <form action="/recognize" method="POST" enctype="multipart/form-data">
+        <input type="file" name="audio" accept="audio/*" capture>
+        <input type="submit" value="Recognize">
+    </form>
+    <div id="results"></div>
+</body>
+</html>
