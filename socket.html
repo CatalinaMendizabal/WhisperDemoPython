@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Audio Send and Receive</title>
+</head>
+<body>
+    <input type="file" id="audioFile" accept=".m4a">
+    <button onclick="startWebSocket()">Send Audio</button>
+    <div id="transcription"></div>
+
+    <script>
+        function startWebSocket() {
+            var socket = new WebSocket('ws://localhost:8765');
+
+            socket.onopen = function(event) {
+                var fileInput = document.getElementById('audioFile');
+                var file = fileInput.files[0];
+
+                if (file) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(event) {
+                        var audioData = event.target.result;
+                        var encodedData = base64ArrayBuffer(audioData);
+                        socket.send(encodedData);
+                    };
+
+                    reader.readAsArrayBuffer(file);
+                }
+            };
+
+            socket.onmessage = function(event) {
+                console.log(event.data)
+                console.log(event.data)
+                var response = JSON.parse(event.data);
+                if (response.action === 'transcription') {
+                    var transcriptionDiv = document.getElementById('transcription');
+                    transcriptionDiv.innerHTML = response.result;
+                }
+            };
+        }
+
+        function base64ArrayBuffer(arrayBuffer) {
+            var base64 = '';
+            var encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+
+            var bytes = new Uint8Array(arrayBuffer);
+            var byteLength = bytes.byteLength;
+            var byteRemainder = byteLength % 3;
+            var mainLength = byteLength - byteRemainder;
+
+            var a, b, c, d;
+            var chunk;
+
+            // Main loop deals with bytes in chunks of 3
+            for (var i = 0; i < mainLength; i += 3) {
+                chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
+
+                a = (chunk & 16515072) >> 18;
+                b = (chunk & 258048) >> 12;
+                c = (chunk & 4032) >> 6;
+                d = chunk & 63;
+
+                base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d];
+            }
+
+            // Deal with the remaining bytes
+            if (byteRemainder === 1) {
+                chunk = bytes[mainLength];
+
+                a = (chunk & 252) >> 2;
+                b = (chunk & 3) << 4;
+
+                base64 += encodings[a] + encodings[b] + '==';
+            } else if (byteRemainder === 2) {
+                chunk = (bytes[mainLength] << 8) | bytes[mainLength + 1];
+
+                a = (chunk & 16128) >> 8;
+                b = (chunk & 1008) >> 4;
+                c = (chunk & 15) << 2;
+
+                base64 += encodings[a] + encodings[b] + encodings[c] + '=';
+            }
+
+            return base64;
+        }
+    </script>
+</body>
+</html>
