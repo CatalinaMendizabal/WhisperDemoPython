@@ -1,8 +1,9 @@
 import asyncio
+import os
 import websockets
 import base64
-import requests
 import whisper
+import openai
 
 
 async def translate_audio(websocket):
@@ -11,12 +12,12 @@ async def translate_audio(websocket):
         audio_data = base64.b64decode(message)
 
         # Save the audio data to a file (optional)
-        with open('audio.m4a', 'wb') as audio_file:
+        with open('temp-audio.m4a', 'wb') as audio_file:
             audio_file.write(audio_data)
 
         # Perform voice recognition using Whisper
         model = whisper.load_model("base")
-        result = model.transcribe("audio.m4a")
+        result = model.transcribe("temp-audio.m4a")
 
         transcription = result["text"]
 
@@ -25,6 +26,9 @@ async def translate_audio(websocket):
             'action': 'transcription',
             'transcription': transcription
         }
+
+        # Delete the audio file (optional)
+        os.remove('temp-audio.m4a')
 
         # Send the JSON response back to the client
         await websocket.send(str(response_data))
