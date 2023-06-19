@@ -11,7 +11,7 @@ def epicrisis_adultos_y_pediatria():
     """
 
 
-def admisiones_internación_adultos():
+def admisiones_internacion_adultos():
     return """"Admisiones internación adultos
     Nombre del paciente: Nombre del paciente mencionado en el mensaje
     Edad: Edad del paciente mencionado en el mensaje

@@ -120,7 +120,7 @@ def get_specific_prompt(format_name):
     if format_name == "Epicrisis adultos y pediatría":
         return strings.epicrisis_adultos_y_pediatria()
     elif format_name == "Admisiones internación adultos":
-        return strings.admisiones_internación_adultos()
+        return strings.admisiones_internacion_adultos()
     else:
         return "No se encontró el formato solicitado"
 
