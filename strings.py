@@ -2,7 +2,7 @@ GET_SPECIFIC_PROMPT = 'get_specific_prompt'
 GET_SPECIFIC_PROMPT_DESCRIPTION = 'Obtener un formato específico'
 
 
-def epicrisis_adultos_y_pediatría():
+def epicrisis_adultos_y_pediatria():
     return """Epicrisis adultos y pediatría
     Nombre del paciente: Nombre del paciente mencionado en el mensaje
     Edad: Edad del paciente mencionado en el mensaje

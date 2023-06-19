@@ -118,7 +118,7 @@ def run_conversation(request_body, logger: Logger):
 
 def get_specific_prompt(format_name):
     if format_name == "Epicrisis adultos y pediatría":
-        return strings.epicrisis_adultos_y_pediatría()
+        return strings.epicrisis_adultos_y_pediatria()
     elif format_name == "Admisiones internación adultos":
         return strings.admisiones_internación_adultos()
     else:
