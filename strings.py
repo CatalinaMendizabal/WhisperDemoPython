@@ -12,12 +12,16 @@ def epicrisis_adultos_y_pediatria():
 
 
 def admisiones_internacion_adultos():
-    return """"Admisiones internación adultos
-    Nombre del paciente: Nombre del paciente mencionado en el mensaje
-    Edad: Edad del paciente mencionado en el mensaje
-    Sexo: Sexo del paciente mencionado en el mensaje
-    Fecha de ingreso: Fecha de ingreso del paciente mencionado en el mensaje
-    Fecha de egreso: Fecha de egreso del paciente mencionado en el mensaje
+    return """"
+    \nAdmisiones internacion adultos
+    \nNombre del paciente: Nombre del paciente mencionado en el mensaje
+    \nEdad: Edad del paciente mencionado en el mensaje
+    \nSexo: Sexo del paciente mencionado en el mensaje
+    \nFecha de ingreso: Fecha de ingreso del paciente mencionado en el mensaje
+    \nFecha de egreso: Fecha de egreso del paciente mencionado en el mensaje
+    \nMotivo de admisiOn: Motivo de admisiOn del paciente mencionado en el mensaje
+    \nDiagnostico principal: DiagnOstico principal del paciente mencionado en el mensaje
+    \nMedicacion: Medicacion asignada para el paciente mencionado en el mensaje
     """
 
 def generic_prompt():

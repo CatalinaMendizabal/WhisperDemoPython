@@ -138,7 +138,7 @@ def translate_audio(request_body, logger: Logger):
     audio_file = open("tmp/audio-temp.m4a", "rb")
 
     logger.info("Calling OpenAI API")
-    result = openai.Audio.translate("whisper-1", audio_file)
+    result = openai.Audio.transcribe("whisper-1", audio_file)
 
     # get the transcription
     transcription = result["text"]

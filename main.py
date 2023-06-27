@@ -1,23 +1,11 @@
 from flask import Flask, render_template, request
 from logging.config import dictConfig
+
+from logger import get_log_configuration
 from translate import translate_audio, Logger, run_conversation
 
 # This configuration should only be used in development
-dictConfig({
-    'version': 1,
-    'formatters': {'default': {
-        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-    }},
-    'handlers': {'wsgi': {
-        'class': 'logging.StreamHandler',
-        'stream': 'ext://flask.logging.wsgi_errors_stream',
-        'formatter': 'default'
-    }},
-    'root': {
-        'level': 'INFO',
-        'handlers': ['wsgi']
-    }
-})
+dictConfig(get_log_configuration())
 
 app = Flask(__name__)
 
