@@ -13,26 +13,6 @@
 <div id="results"></div>
 
 <script>
-    /*function uploadFile() {
-        var fileInput = document.getElementById('fileInput');
-        var file = fileInput.files[0];
-        console.log(file)
-        console.log('file')
-
-        if (file) {
-            var reader = new FileReader();
-            reader.onload = function (event) {
-                var fileData = event.target.result.split(',')[1]; // Extract base64 data
-                // send data in base 64
-                var base65Data = base64ArrayBuffer(fileData);
-                sendRequest(base65Data);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            alert('Please choose a file to upload.');
-        }
-    }*/
-
     function uploadFile() {
         var fileInput = document.getElementById('fileInput');
         var file = fileInput.files[0];
@@ -52,6 +32,7 @@
 
     function sendRequest(fileData) {
         var requestData = {
+            type: "Epicrisis adultos y pediatria",
             audio: fileData
         };
 
@@ -90,39 +71,9 @@
         });
     }
 
-    function base64ArrayBuffer(fileData) {
-        var binaryString = window.atob(fileData);
-        var binaryLen = binaryString.length;
-        var bytes = new Uint8Array(binaryLen);
-        for (var i = 0; i < binaryLen; i++) {
-            var ascii = binaryString.charCodeAt(i);
-            bytes[i] = ascii;
-        }
-        return bytes;
-    }
-
     document.querySelector('form').addEventListener('submit', function (event) {
             event.preventDefault();
             uploadFile();
-            /*var form = event.target;
-            var formData = new FormData(form);
-
-            // send data in base 64
-            var reader = new FileReader();
-            console.log(formData)
-            reader.onload = function (event) {
-                var base64 = event.target.result.split(',')[1];
-                formData.append('audio', base64);
-                sendRequest(base64);
-                fetch('/recognize', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById('results').innerText = data;
-                    });
-            };*/
         }
     );
 </script>

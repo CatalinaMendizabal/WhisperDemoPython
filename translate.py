@@ -6,6 +6,7 @@ from flask.cli import load_dotenv
 import openai
 
 import strings
+from utils import extract_text_from_pdf, parse_text_to_json
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -25,10 +26,10 @@ class Logger:
         print(message)
 
 
-def get_initial_state(input_text):
+def get_initial_state(input_text, form_type):
     return [
         {"role": "system", "content": strings.generic_prompt()},
-        {"role": "user", "content": input_text},
+        {"role": "user", "content": form_type + " " + input_text},
     ]
 
 
@@ -44,7 +45,8 @@ def get_functions():
                         "type": "string",
                         "description": "Nombre del formato que el usuario quiere obtener. Estos pueden ser:"
                                        "- Epicrisis adultos y pediatría"
-                                       "- Admisiones internación adultos",
+                                       "- Admisiones internación adultos"
+                                       "- Evolución",
                     }
                 },
                 "required": ["format_name"],
@@ -55,13 +57,11 @@ def get_functions():
 
 def run_conversation(request_body, logger: Logger):
     input_text = translate_audio(request_body, logger)
-
-    # input_text = "Formulario de Epicrisis adultos y pediatría para el paciente Tomas Ignacio Berretta, masculino, " \
-    #                  "de 5 años de edad, con diagnóstico de COVID-19. Ingresó en el día de hoy a las 10:00 hs. "
+    form_type = request_body['type']
 
     logger.info(f"Input text: {input_text}")
 
-    messages = get_initial_state(input_text)
+    messages = get_initial_state(input_text, form_type)
 
     response = openai.ChatCompletion.create(
         model=os.getenv("MODEL_NAME"),
@@ -86,9 +86,7 @@ def run_conversation(request_body, logger: Logger):
         function_to_call = available_functions[function_name]
         function_args = json.loads(response_message["function_call"]["arguments"])
 
-        function_response = function_to_call(
-            format_name=function_args.get("format_name"),
-        )
+        function_response = function_to_call(form_type)
 
         if function_response is None:
             function_response = "No se encontró el formato solicitado"
@@ -116,11 +114,13 @@ def run_conversation(request_body, logger: Logger):
         return second_response["choices"][0]["message"]
 
 
-def get_specific_prompt(format_name):
-    if format_name == "Epicrisis adultos y pediatría":
-        return strings.epicrisis_adultos_y_pediatria()
-    elif format_name == "Admisiones internación adultos":
-        return strings.admisiones_internacion_adultos()
+def get_specific_prompt(form_type):
+    if form_type.__eq__("Epicrisis adultos y pediatria"):
+        return strings.epicrisis_prompt()
+    elif form_type.__eq__("Admisiones internacion adultos"):
+        return strings.admissions_prompt()
+    # elif form_type.__eq__("Evolucion"):
+    #     return strings.admissions_prompt()
     else:
         return "No se encontró el formato solicitado"
 
@@ -149,3 +149,5 @@ def translate_audio(request_body, logger: Logger):
     os.remove('tmp/audio-temp.m4a')
 
     return transcription
+
+

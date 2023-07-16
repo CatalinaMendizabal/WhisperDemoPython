@@ -1,0 +1,12 @@
+{
+    "Tipo de evaluacion": "Tipo de evaluacion",
+    "Edad": "Edad del paciente nombrado",
+    "Sexo": "Sexo del paciente nombrado. Este puede ser Femenino o Masculino",
+    "Raza": "Raza del paciente nombrado. Este puede ser Blanco, Negro u Oriental.",
+    "Motivo de consulta/ingreso": "Mo1vo por el cual el paciente fue ingresado o realiza la consulta.",
+    "Enfermedad actual y sus antecedentes": "Enfermedad actual del paciente mencionado y antecedentes que existen",
+    "Medicacion que recibe actualmente": "Medicacion que recibe el paciente mencionado al momento. Esto hace referencia al 1po de droga y la dosis diaria de aplicacion",
+    "Otros datos de medicacion actual": "Informacion relevante a la medicacion del paciente mencionado. Esto hace referencia al 1po de droga y la dosis diaria de aplicacion",
+    "Antecedentes patologicos": "Antecedentes patologicos del paciente mencionado. Estos pueden ser:",
+    "Tabaquismo": "Si el paciente mencionado es considerado que consume tabaco se requiere la siguiente informacion: La cantidad de cigarrillos que fuma el paciente mencionado en un dia. Y si el paciente mencionado dejo de fumar, hace cuanto dejo el paciente mencionado el tabaco, en funcion de años"
+}

@@ -1,0 +1,23 @@
+{
+    "Nombre": "nombre del paciente mencionado",
+    "Apellido": "apellido del paciente mencionado",
+    "Historia clinica": "numero de historia clinica mencionada",
+    "Staff a cargo de la internaciin": "persona a cargo mencionado",
+    "Motivo de admision": "razon por la cual el paciente mencionado fue ingresado",
+    "Antecedentes relevantes": "antecedente relevantes del paciente mencionados",
+    "Evaluacion de internacion": "evaluacion de internacion del paciente mencionado",
+    "Estudios realizados": "estudios que se realizaron sobre el paciente mencionado",
+    "Diagnostico principal de egreso/transferencia": "Diagnostico principal del egreso del paciente mencionado",
+    "Diagnostico secundario de egreso/transferencia": "Diagnostico secundario del egreso del paciente mencionado",
+    "Medicaciones al egreso": "indicacion de las medicaciones mencionadas que el paciente debe consumir al egreso",
+    "Dosis": "indicacion de la dosis mencionada que debe consumir el paciente",
+    "Frecuencia": "indicacion de la frecuencia que debe consumir la dosis el paciente",
+    "Duracion": "la duracion que el paciente debe consumir la droga mencionada",
+    "Via": "La via de la medicacion, estas pueden ser: via subcutanea (SC); via Oral (VO); via Endovenosa (VE); via Enteral (E); via Intramuscular (IM)",
+    "Dieta": "Restricciones alimen6cias que el paciente mencionado debe consumir",
+    "Medicacion previa del paciente": "Medicacion previa que consumio el paciente mencionado",
+    "Medicacion previa del paciente suspendida/modifficada": "Medicacion previa del paciente mencionado fue suspendida o modificada,  y la razon.",
+    "Instrucciones de seguimiento": "instrucciones que el paciente mencionado debe seguir. Puede contener turnos pendientes y estudios pendientes.",
+    "Pautas de alarma": "Pautas que se deben tener en consideracion que levanten una alarma sobre el paciente mencionado",
+    "Confeccion de epicrisis": "nombre y matricula del staff a cargo mencionado"
+}
