@@ -28,7 +28,6 @@ importlib-metadata==6.6.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
 jmespath==1.0.1
-langchain==0.0.183
 llvmlite==0.40.0
 lxml==4.9.2
 MarkupSafe==2.1.2
@@ -52,6 +51,7 @@ pdfminer.six==20191110
 Pillow==9.5.0
 pycryptodome==3.18.0
 pydantic==1.10.9
+PyPDF2==3.0.1
 python-dateutil==2.8.2
 python-dotenv==1.0.0
 python-pptx==0.6.21
@@ -78,5 +78,3 @@ xlrd==1.2.0
 XlsxWriter==3.1.2
 yarl==1.9.2
 zipp==3.15.0
-
-pypdf2~=3.0.1
