@@ -1,14 +1,13 @@
-import json
-
 from office365.runtime.auth.authentication_context import AuthenticationContext
 from office365.sharepoint.client_context import ClientContext
 from flask.cli import load_dotenv
 import os
+from urllib.parse import quote
 
-from office365.sharepoint.sharing.links.kind import SharingLinkKind
 
 # Replace these with your SharePoint site URL, username, and password
 url = "https://alumniiaeedu.sharepoint.com/sites/Tesis2023"
+sharepoint_url = "https://alumniiaeedu.sharepoint.com"
 load_dotenv()
 username = os.getenv("SHAREPOINT_USERNAME")
 password = os.getenv("SHAREPOINT_PASSWORD")
@@ -44,18 +43,12 @@ def get_files_in_folder(folder):
     for file in folder_files:
         file_name = file.properties["Name"]
         file_url = file.properties["ServerRelativeUrl"]
-        full_file_url = f"{url}{file_url}"
-
-        # TODO Create the sharing link with view permission
-        # sharing_link = web.create_anonymous_link(context=ctx, url=file_url, is_edit_link=False)
-        # sharing_link = web.create_anonymous_link(file_url, SharingLinkKind.AnonymousView, True)
-        # ctx.execute_query()
+        full_file_url = f"{sharepoint_url}{file_url}"
 
         # Get the sharing link URL
-        # sharing_url = sharing_link.value
         print("File:", file_name)
         print("File URL:", full_file_url)
-        # print("Share Link:", sharing_url)
+        print("File URL link:", quote(full_file_url, safe=':/'))
 
     # Get all sub_folders inside the current folder
     sub_folders = folder.folders
