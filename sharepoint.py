@@ -20,7 +20,7 @@ else:
     print("Failed to authenticate!")
     exit()
 
-list_name = "Documentos"  # Replace this with the name of your SharePoint document library
+list_name = "Documentos"
 
 web = ctx.web
 ctx.load(web)
@@ -39,16 +39,16 @@ def get_files_in_folder(folder):
     ctx.load(folder_files)
     ctx.execute_query()
 
-    # Print the names and URL links of files inside the folder
+    # Return the names and URL links of files inside the folder
     for file in folder_files:
         file_name = file.properties["Name"]
         file_url = file.properties["ServerRelativeUrl"]
         full_file_url = f"{sharepoint_url}{file_url}"
+        beauty_url = quote(full_file_url, safe=':/')
 
         # Get the sharing link URL
         print("File:", file_name)
-        print("File URL:", full_file_url)
-        print("File URL link:", quote(full_file_url, safe=':/'))
+        print("File URL:", beauty_url)
 
     # Get all sub_folders inside the current folder
     sub_folders = folder.folders
