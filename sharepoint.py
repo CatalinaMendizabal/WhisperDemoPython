@@ -1,9 +1,11 @@
+import json
+
 from office365.runtime.auth.authentication_context import AuthenticationContext
 from office365.sharepoint.client_context import ClientContext
 from flask.cli import load_dotenv
 import os
 
-from office365.sharepoint.listitems.caml.query import CamlQuery
+from office365.sharepoint.sharing.links.kind import SharingLinkKind
 
 # Replace these with your SharePoint site URL, username, and password
 url = "https://alumniiaeedu.sharepoint.com/sites/Tesis2023"
@@ -20,24 +22,60 @@ else:
     exit()
 
 list_name = "Documentos"  # Replace this with the name of your SharePoint document library
-folder_name = "Adultos"  # Replace this with the name of the folder
 
 web = ctx.web
 ctx.load(web)
 ctx.execute_query()
 
-# Get the folder from the document library
+
+# Function to retrieve files inside a folder and its sub_folders
+def get_files_in_folder(folder):
+
+    # Do not retrieve files inside the "Forms" folder
+    if folder.properties["Name"] == "Forms":
+        return
+
+    # Get all files inside the current folder
+    folder_files = folder.files
+    ctx.load(folder_files)
+    ctx.execute_query()
+
+    # Print the names and URL links of files inside the folder
+    for file in folder_files:
+        file_name = file.properties["Name"]
+        file_url = file.properties["ServerRelativeUrl"]
+        full_file_url = f"{url}{file_url}"
+
+        # TODO Create the sharing link with view permission
+        # sharing_link = web.create_anonymous_link(context=ctx, url=file_url, is_edit_link=False)
+        # sharing_link = web.create_anonymous_link(file_url, SharingLinkKind.AnonymousView, True)
+        # ctx.execute_query()
+
+        # Get the sharing link URL
+        # sharing_url = sharing_link.value
+        print("File:", file_name)
+        print("File URL:", full_file_url)
+        # print("Share Link:", sharing_url)
+
+    # Get all sub_folders inside the current folder
+    sub_folders = folder.folders
+    ctx.load(sub_folders)
+    ctx.execute_query()
+
+    # Recursively call the function for each sub_folder
+    for sub_folder in sub_folders:
+        get_files_in_folder(sub_folder)
+
+
+# Get the list (library) object
 list_obj = web.lists.get_by_title(list_name)
-folder = list_obj.root_folder.folders.get_by_url(folder_name)
-ctx.load(folder)
+ctx.load(list_obj)
 ctx.execute_query()
 
-# Retrieve all items (documents) from the folder
-query = CamlQuery.create_all_items_query()
-items = folder.files
-ctx.load(items)
+# Get the root folder of the list
+root_folder = list_obj.root_folder
+ctx.load(root_folder)
 ctx.execute_query()
 
-for item in items:
-    # Print the name of the document (file) in the folder
-    print(item.properties["Name"])
+# Call the function to retrieve files in the root folder and its sub_folders
+get_files_in_folder(root_folder)
