@@ -5,70 +5,78 @@ import os
 from urllib.parse import quote
 
 
-# Replace these with your SharePoint site URL, username, and password
-url = "https://alumniiaeedu.sharepoint.com/sites/Tesis2023"
-sharepoint_url = "https://alumniiaeedu.sharepoint.com"
-load_dotenv()
-username = os.getenv("SHAREPOINT_USERNAME")
-password = os.getenv("SHAREPOINT_PASSWORD")
+def get_files_information():
+    # Replace these with your SharePoint site URL, username, and password
+    url = "https://alumniiaeedu.sharepoint.com/sites/Tesis2023"
+    sharepoint_url = "https://alumniiaeedu.sharepoint.com"
+    load_dotenv()
+    username = os.getenv("SHAREPOINT_USERNAME")
+    password = os.getenv("SHAREPOINT_PASSWORD")
 
-ctx_auth = AuthenticationContext(url)
+    ctx_auth = AuthenticationContext(url)
 
-if ctx_auth.acquire_token_for_user(username, password):
-    ctx = ClientContext(url, ctx_auth)
-else:
-    print("Failed to authenticate!")
-    exit()
+    if ctx_auth.acquire_token_for_user(username, password):
+        ctx = ClientContext(url, ctx_auth)
+    else:
+        print("Failed to authenticate!")
+        exit()
 
-list_name = "Documentos"
+    list_name = "Documentos"
 
-web = ctx.web
-ctx.load(web)
-ctx.execute_query()
-
-
-# Function to retrieve files inside a folder and its sub_folders
-def get_files_in_folder(folder):
-
-    # Do not retrieve files inside the "Forms" folder
-    if folder.properties["Name"] == "Forms":
-        return
-
-    # Get all files inside the current folder
-    folder_files = folder.files
-    ctx.load(folder_files)
+    web = ctx.web
+    ctx.load(web)
     ctx.execute_query()
 
-    # Return the names and URL links of files inside the folder
-    for file in folder_files:
-        file_name = file.properties["Name"]
-        file_url = file.properties["ServerRelativeUrl"]
-        full_file_url = f"{sharepoint_url}{file_url}"
-        beauty_url = quote(full_file_url, safe=':/')
+    def get_files_in_folder(folder):
+        results = []
 
-        # Get the sharing link URL
-        print("File:", file_name)
-        print("File URL:", beauty_url)
+        # Do not retrieve files inside the "Forms" folder
+        if folder.properties["Name"] == "Forms":
+            return results
 
-    # Get all sub_folders inside the current folder
-    sub_folders = folder.folders
-    ctx.load(sub_folders)
+        # Get all files inside the current folder
+        folder_files = folder.files
+        ctx.load(folder_files)
+        ctx.execute_query()
+
+        # Return the names and URL links of files inside the folder
+        for file in folder_files:
+            f_name = file.properties["Name"]
+            file_url = file.properties["ServerRelativeUrl"]
+            full_file_url = f"{sharepoint_url}{file_url}"
+            file_link = quote(full_file_url, safe=':/')
+
+            # Append the f_name and file_link to the results list
+            results.append({"name": f_name, "value": file_link})
+
+        # Get all sub_folders inside the current folder
+        sub_folders = folder.folders
+        ctx.load(sub_folders)
+        ctx.execute_query()
+
+        # Recursively call the function for each sub_folder
+        for sub_folder in sub_folders:
+            results.extend(get_files_in_folder(sub_folder))
+
+        return results
+
+    # Get the list (library) object
+    list_obj = web.lists.get_by_title(list_name)
+    ctx.load(list_obj)
     ctx.execute_query()
 
-    # Recursively call the function for each sub_folder
-    for sub_folder in sub_folders:
-        get_files_in_folder(sub_folder)
+    # Get the root folder of the list
+    root_folder = list_obj.root_folder
+    ctx.load(root_folder)
+    ctx.execute_query()
 
+    # Call the function to retrieve files in the root folder and its sub_folders
+    file_info = get_files_in_folder(root_folder)
 
-# Get the list (library) object
-list_obj = web.lists.get_by_title(list_name)
-ctx.load(list_obj)
-ctx.execute_query()
+    # Print the results
+    for file in file_info:
+        print(f"Name: {file['name']}")
+        print(f"Link: {file['value']}")
+        print()
 
-# Get the root folder of the list
-root_folder = list_obj.root_folder
-ctx.load(root_folder)
-ctx.execute_query()
-
-# Call the function to retrieve files in the root folder and its sub_folders
-get_files_in_folder(root_folder)
+    return file_info

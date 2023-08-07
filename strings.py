@@ -2,6 +2,8 @@ import json
 
 GET_SPECIFIC_PROMPT = 'get_specific_prompt'
 GET_SPECIFIC_PROMPT_DESCRIPTION = 'Obtener un formato específico'
+GET_MATCHING_FILES = 'get_matching_files'
+GET_MATCHING_FILES_DESCRIPTION = 'Obtener los archivos que coinciden con la búsqueda'
 
 
 # def epicrisis_adultos_y_pediatria():

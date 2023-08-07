@@ -2,7 +2,7 @@
     "Nombre": "nombre del paciente mencionado",
     "Apellido": "apellido del paciente mencionado",
     "Historia clinica": "numero de historia clinica mencionada",
-    "Staff a cargo de la internaciin": "persona a cargo mencionado",
+    "Staff a cargo de la internacion": "persona a cargo mencionado",
     "Motivo de admision": "razon por la cual el paciente mencionado fue ingresado",
     "Antecedentes relevantes": "antecedente relevantes del paciente mencionados",
     "Evaluacion de internacion": "evaluacion de internacion del paciente mencionado",

@@ -6,7 +6,7 @@ from flask.cli import load_dotenv
 import openai
 
 import strings
-from utils import extract_text_from_pdf, parse_text_to_json
+from sharepoint import get_files_information
 
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -63,6 +63,9 @@ def run_conversation(request_body, logger: Logger):
 
     messages = get_initial_state(input_text, form_type)
 
+    # Get all the files from sharepoint
+    files = get_files_information()
+
     response = openai.ChatCompletion.create(
         model=os.getenv("MODEL_NAME"),
         messages=messages,
@@ -110,8 +113,12 @@ def run_conversation(request_body, logger: Logger):
 
         logger.info(f"Second response: {second_response}")
 
+        logger.info("Getting files from sharepoint")
+        allTheFiles = get_matching_files(second_response["choices"][0]["message"], logger)
+        logger.info("Got files from sharepoint")
+
         # get a new response from GPT where it can see the function response
-        return second_response["choices"][0]["message"]
+        return second_response["choices"][0]["message"], allTheFiles
 
 
 def get_specific_prompt(form_type):
@@ -151,3 +158,24 @@ def translate_audio(request_body, logger: Logger):
     return transcription
 
 
+def get_matching_files(response, logger: Logger):
+    logger.info('Entered get matching files')
+
+    files = get_files_information()
+
+    # Extract all words from the content in the response_template and convert them to a set
+    words_in_template = set(response["content"].split())
+
+    # Search for files that have any of the words in their name
+    matching_files = []
+    for file in files:
+        file_name = file["name"]
+        if any(word in words_in_template and len(word) > 3 for word in file_name.split()):
+            matching_files.append(file)
+
+    # Print the matching files
+    for file in matching_files:
+        print("Name:", file["name"])
+        print("Link:", file["value"])
+
+    return matching_files
