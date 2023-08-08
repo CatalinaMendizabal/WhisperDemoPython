@@ -117,8 +117,12 @@ def run_conversation(request_body, logger: Logger):
         allTheFiles = get_matching_files(second_response["choices"][0]["message"], logger)
         logger.info("Got files from sharepoint")
 
-        # get a new response from GPT where it can see the function response
-        return second_response["choices"][0]["message"], allTheFiles
+        final_response = {
+            "response": second_response["choices"][0]["message"],
+            "files": allTheFiles
+        }
+
+        return final_response
 
 
 def get_specific_prompt(form_type):
