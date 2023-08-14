@@ -64,7 +64,7 @@ def run_conversation(request_body, logger: Logger):
     messages = get_initial_state(input_text, form_type)
 
     # Get all the files from sharepoint
-    files = get_files_information()
+    # files = get_files_information()
 
     response = openai.ChatCompletion.create(
         model=os.getenv("MODEL_NAME"),
