@@ -3,6 +3,7 @@ from logging.config import dictConfig
 
 from logger import get_log_configuration
 from translate import Logger, run_conversation
+import airtable_api
 
 # This configuration should only be used in development
 dictConfig(get_log_configuration())
@@ -30,6 +31,41 @@ class FlaskLogger(Logger):
 @app.route('/')
 def voice_recognition_page():
     return render_template('index.html')
+
+
+@app.route('/get-records', methods=['GET'])
+def get_table_records():
+    app.logger.info('Entered GET /get-table-records')
+
+    table_name = 'Records'
+
+    response = airtable_api.get_all_records_from_table(table_name)
+
+    print("Response:", response)
+
+    return response
+
+
+@app.route('/add-record', methods=['POST'])
+def add_record():
+    app.logger.info('Entered POST /add-record')
+
+    request_body = request.get_json()
+    app.logger.info('Started agent run message %s', request_body)
+
+    # mock_fields = {
+    #     "Date": "2021-05-06",
+    #     "Diagnosis": "Diagnosis del paciente",
+    #     "Documents": [{"url": "https://www.google.com"}, {
+    #         "url": "https://airtable.com/app8r9i9DgtZAtU9l/tblSId1c58UtaXsvQ/viwVrQcujfC2VJRHP?blocks=hide"}],
+    #     "Form": "Ingreso",
+    # }
+
+    response = airtable_api.add_record("Records", request_body)
+
+    print("Response:", response)
+
+    return response
 
 
 @app.route('/recognize', methods=['POST'])
