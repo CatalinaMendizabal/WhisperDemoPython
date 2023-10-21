@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request
+from flask_cors import cross_origin
 from logging.config import dictConfig
 
 from logger import get_log_configuration
 from translate import Logger, run_conversation
+from sharepoint import get_files_information
 import airtable_api
 
 # This configuration should only be used in development
@@ -34,6 +36,7 @@ def voice_recognition_page():
 
 
 @app.route('/get-records', methods=['GET'])
+@cross_origin()
 def get_table_records():
     app.logger.info('Entered GET /get-table-records')
 
@@ -45,8 +48,8 @@ def get_table_records():
 
     return response
 
-
 @app.route('/add-record', methods=['POST'])
+@cross_origin()
 def add_record():
     app.logger.info('Entered POST /add-record')
 
@@ -60,8 +63,26 @@ def add_record():
     #         "url": "https://airtable.com/app8r9i9DgtZAtU9l/tblSId1c58UtaXsvQ/viwVrQcujfC2VJRHP?blocks=hide"}],
     #     "Form": "Ingreso",
     # }
+    documents = request_body["Documents"]
+    added_documents_names = [document["Name"] for document in documents]
+    records = airtable_api.get_all_records_from_table("Documents")
+    record_names = [record["fields"]["Name"] for record in records['records']]
+    record_ids_in_table = [record["id"] for record in records['records'] if record["fields"]["Name"] in added_documents_names]
+    unsaved_documents = [document for document in documents if document["Name"] not in record_names]
 
-    response = airtable_api.add_record("Records", request_body)
+    saved_docs_ids = []
+    for unsaved_doc in unsaved_documents:
+        doc_response = airtable_api.add_record("Documents", unsaved_doc)
+        saved_docs_ids.append(doc_response["id"])
+
+    record_request_body = {
+        "Date": request_body["Date"],
+        "Diagnosis": request_body["Diagnosis"],
+        "Form": request_body["Form"],
+        "Documents": record_ids_in_table + saved_docs_ids
+    }
+
+    response = airtable_api.add_record("Records", record_request_body)
 
     print("Response:", response)
 
@@ -69,6 +90,7 @@ def add_record():
 
 
 @app.route('/recognize', methods=['POST'])
+@cross_origin()
 def recognize_audio():
     app.logger.info('Entered POST /recognize')
 
@@ -76,6 +98,16 @@ def recognize_audio():
     app.logger.info('Started agent run message %s', request_body)
 
     response = run_conversation(request_body, logger=FlaskLogger(app))
+
+    print("Response:", response)
+
+    return response
+
+@app.route('/getFiles', methods=['GET'])
+def get_sharepoint_files():
+    app.logger.info('Entered GET /get-files')
+
+    response = get_files_information()
 
     print("Response:", response)
 

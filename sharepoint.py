@@ -22,7 +22,7 @@ def get_files_information():
         print("Failed to authenticate!")
         exit()
 
-    list_name = "Documentos"
+    list_name = "Guía de Práctica Clínica"
 
     web = ctx.web
     ctx.load(web)
