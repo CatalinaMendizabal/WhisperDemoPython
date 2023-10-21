@@ -36,6 +36,12 @@ def voice_recognition_page():
     return render_template('index.html')
 
 
+@app.route('/ping')
+def ping():
+    app.logger.info('Entered GET /ping')
+    return 'pong'
+
+
 @app.route('/get-records', methods=['GET'])
 @cross_origin()
 def get_table_records():
