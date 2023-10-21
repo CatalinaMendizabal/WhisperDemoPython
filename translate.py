@@ -130,8 +130,8 @@ def get_specific_prompt(form_type):
         return strings.epicrisis_prompt()
     elif form_type.__eq__("Admisiones internacion adultos"):
         return strings.admissions_prompt()
-    # elif form_type.__eq__("Evolucion"):
-    #     return strings.admissions_prompt()
+    elif form_type.__eq__("Evolucion"):
+        return strings.evolution_prompt()
     else:
         return "No se encontró el formato solicitado"
 

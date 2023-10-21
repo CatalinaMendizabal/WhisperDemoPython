@@ -5,6 +5,7 @@ from logging.config import dictConfig
 from logger import get_log_configuration
 from translate import Logger, run_conversation
 from sharepoint import get_files_information
+from utils import extract_specific_path
 import airtable_api
 
 # This configuration should only be used in development
@@ -79,7 +80,8 @@ def add_record():
         "Date": request_body["Date"],
         "Diagnosis": request_body["Diagnosis"],
         "Form": request_body["Form"],
-        "Documents": record_ids_in_table + saved_docs_ids
+        "Documents": record_ids_in_table + saved_docs_ids,
+        "History_number": request_body["History_number"]
     }
 
     response = airtable_api.add_record("Records", record_request_body)
@@ -113,6 +115,10 @@ def get_sharepoint_files():
 
     return response
 
+@app.route('/parse-file', methods=['POST'])
+def parse_file():
+    extract_specific_path("./pdfs/Evolucion.pdf", "jsonForms/evolucion.json")
+    return {}
 
 if __name__ == '__main__':
     app.run(host='localhost', port=8080)
