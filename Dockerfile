@@ -1,4 +1,4 @@
-FROM python:3.9-slim-bullseye
+FROM python:3.8-slim-bullseye
 COPY . .
 RUN apt update && apt install -y git
 RUN pip install --upgrade pip
