@@ -36,6 +36,12 @@ def voice_recognition_page():
     return render_template('index.html')
 
 
+@app.route('/ping', methods=['GET'])
+def ping():
+    app.logger.info('Entered GET /ping')
+    return 'pong'
+
+
 @app.route('/get-records', methods=['GET'])
 @cross_origin()
 def get_table_records():
@@ -115,10 +121,14 @@ def get_sharepoint_files():
 
     return response
 
+
 @app.route('/parse-file', methods=['POST'])
 def parse_file():
     extract_specific_path("./pdfs/Evolucion.pdf", "jsonForms/evolucion.json")
     return {}
 
+
 if __name__ == '__main__':
-    app.run(host='localhost', port=8080)
+    from waitress import serve
+
+    serve(app, port=5000)
