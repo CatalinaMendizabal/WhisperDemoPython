@@ -1,0 +1,19 @@
+version: 1
+
+services:
+  api:
+    container_name: hua_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      MODEL_NAME: ${MODEL_NAME}
+      SHAREPOINT_USERNAME: ${SHAREPOINT_USERNAME}
+      SHAREPOINT_PASSWORD: ${SHAREPOINT_PASSWORD}
+      SHAREPOINT_LONG_URL: ${SHAREPOINT_LONG_URL}
+      SHAREPOINT_URL: ${SHAREPOINT_URL}
+      BASE_ID: ${BASE_ID}
+      AIRTABLE_API_KEY: ${AIRTABLE_API_KEY}
