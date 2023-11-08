@@ -1,4 +1,6 @@
 {
+    "Nombre": "nombre del paciente mencionado",
+    "Apellido": "apellido del paciente mencionado",
     "Medico a cargo": "Medico mencionado a cargo del paciente",
     "Motivo de internación": "Motivo mencionado por el cual el paciente esta internado",
     "Dolor": "Dolor o dolores mencionados de los cuales el paciente padece",
